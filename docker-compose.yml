@@ -10,7 +10,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       # needed to access the biz logs to test (read only) :
-     - "/Users/xz/work/chiwen/var/log:/var/log/applogs/chiwen:ro"
+     - "/Users/liuyang/work/chiwen/var/log:/var/log/applogs/chiwen:ro"
   filebeat-logstash:
     hostname: filebeat-logstash
     image: myelk/filebeat-logstash:1.0.0
@@ -19,7 +19,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       # needed to access the biz logs to test (read only) :
-      - "/Users/xz/work/chiwen/var/log:/var/log/applogs/chiwen:ro"
+      - "/Users/liuyang/work/chiwen/var/log:/var/log/applogs/chiwen:ro"
   kibana:
     image: kibana:6.5.2
     environment:
