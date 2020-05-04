@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  # 投递到kafka
+  filebeat-kafka:
+    hostname: filebeat-kafka
+    image: myelk/filebeat-kafka:1.0.0
+    build:
+      context: filebeat_biz_log_kafka 
+      dockerfile: Dockerfile
+    volumes:
+      # needed to access the biz logs to test (read only) :
+     - "/Users/xz/work/chiwen/var/log:/var/log/applogs/chiwen:ro"
+  filebeat-logstash:
+    hostname: filebeat-logstash
+    image: myelk/filebeat-logstash:1.0.0
+    build:
+      context: filebeat_biz_log_logstash
+      dockerfile: Dockerfile
+    volumes:
+      # needed to access the biz logs to test (read only) :
+      - "/Users/xz/work/chiwen/var/log:/var/log/applogs/chiwen:ro"
+  kibana:
+    image: kibana:6.5.2
+    environment:
+      - "LOGGING_QUIET=true"
+    ports:
+      - 5601:5601
+  logstash: 
+    hostname: logstash 
+    image: myelk/logstash:1.0.0
+    build:
+      context: logstash
+      dockerfile: Dockerfile
+    ports:
+      - 5044:5044
+    environment:
+      LOG_LEVEL: error
+  elasticsearch:
+    hostname: elasticsearch
+    image: myelk/elasticsearch:1.0.0
+    build:
+      context: elasticsearch
+      dockerfile: Dockerfile
+    environment:
+      - cluster.name=myelk
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+networks:
+  default:
+    external:
+      name: my_cluster 

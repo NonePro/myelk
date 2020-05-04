@@ -1,0 +1,29 @@
+filebeat.inputs:
+- type: log 
+  enabled: true
+  paths:
+    - /var/log/applogs/chiwen/*.log 
+  
+# setup filebeat to send output to logstash
+output.kafka:
+  hosts: ["kafka-1:19092","kafka-2:29092","kafka-3:39092"]
+  # message topic selection + partitioning
+  topic: 'xzbizlog'
+  partition.round_robin:
+    reachable_only: false
+
+  required_acks: 1
+  compression: gzip
+  max_message_bytes: 1000000
+
+# Write Filebeat own logs only to file to avoid catching them with itself in docker log files
+logging.level: error
+logging.to_files: false
+logging.to_syslog: false
+loggins.metrice.enabled: false
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  keepfiles: 7
+  permissions: 0644
+ssl.verification_mode: none

@@ -1,0 +1,25 @@
+filebeat.inputs:
+- type: log 
+  enabled: true
+  paths:
+    - /var/log/applogs/chiwen/*.log 
+  
+# setup filebeat to send output to logstash
+output.logstash:
+  hosts: ["logstash"]
+
+setup.dashboards.enabled: true
+setup.kibana.host: "kibana:5601"
+setup.dashboards.kibana_index: "biz-log-*"
+
+# Write Filebeat own logs only to file to avoid catching them with itself in docker log files
+logging.level: error
+logging.to_files: false
+logging.to_syslog: false
+loggins.metrice.enabled: false
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  keepfiles: 7
+  permissions: 0644
+ssl.verification_mode: none
