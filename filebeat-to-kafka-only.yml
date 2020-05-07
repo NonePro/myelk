@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  # 投递到kafka
+  filebeat-kafka:
+    hostname: filebeat-kafka
+    image: myelk/filebeat-kafka:1.0.0
+    build:
+      context: filebeat_biz_log_kafka 
+      dockerfile: Dockerfile
+    volumes:
+      # needed to access the biz logs to test (read only) :
+     - "/Users/liuyang/work/chiwen/var/log:/var/log/applogs/chiwen:ro"
+networks:
+  default:
+    external:
+      name: my_cluster 

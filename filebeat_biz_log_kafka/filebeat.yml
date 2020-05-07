@@ -2,7 +2,7 @@ filebeat.inputs:
 - type: log 
   enabled: true
   paths:
-    - /var/log/applogs/chiwen/*.log 
+    - /var/log/applogs/chiwen/*.biz.log 
   
 # setup filebeat to send output to logstash
 output.kafka:
